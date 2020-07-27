@@ -4,8 +4,8 @@ A thin, practical wrapper around terminal capabilities in Python.
 http://pypi.python.org/pypi/blessed
 """
 # std imports
-import platform as _platform
 import sys as _sys
+import platform as _platform
 
 if _platform.system() == 'Windows':
     from blessed.win_terminal import Terminal
