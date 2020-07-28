@@ -282,8 +282,7 @@ def test_python3_2_raises_exception(monkeypatch):
     """Test python version 3.0 through 3.2 raises an exception."""
     import blessed
 
-    monkeypatch.setattr('platform.python_version_tuple',
-                        lambda: ('3', '2', '2'))
+    monkeypatch.setattr('sys.version_info', (3, 2, 2, 'final', 0))
 
     try:
         reload_module(blessed)

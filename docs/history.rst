@@ -46,6 +46,7 @@ Version History
     not attached. :ghissue:`69`.
   * deprecated: using argument ``_intr_continue`` to method :meth:`~Terminal.kbhit`, behavior is as
     though such value is always True since 1.9.
+  * bugfix: Now imports on 3.10+
 
 1.16
   * introduced: Windows support?! :ghpull:`110` by :ghuser:`avylove`.
