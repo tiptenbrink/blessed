@@ -23,7 +23,7 @@ link.
 bounce.py
 ---------
 
-https://github.com/jquast/blessed/blob/master/bin/editor.py
+https://github.com/jquast/blessed/blob/master/bin/bounce.py
 
 This is a very brief, basic primitive non-interactive version of a "classic tennis" video game. It
 demonstrates basic timed refresh of a bouncing terminal cell.
