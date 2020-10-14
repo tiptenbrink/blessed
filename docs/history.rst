@@ -47,6 +47,7 @@ Version History
   * deprecated: using argument ``_intr_continue`` to method :meth:`~Terminal.kbhit`, behavior is as
     though such value is always True since 1.9.
   * bugfix: Now imports on 3.10+
+  * bugfix: Fix detection of shift+arrow keys when using tmux. :ghissue:`178`.
 
 1.16
   * introduced: Windows support?! :ghpull:`110` by :ghuser:`avylove`.
