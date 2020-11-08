@@ -5,7 +5,7 @@ If you just want to move the location of the cursor before writing text, and are
 returning, do something like this:
 
     >>> print(term.home + term.clear)
-    >>> print(term.down(2) + term.move_right(20) + term.bright_red('fire!'))
+    >>> print(term.move_down(2) + term.move_right(20) + term.bright_red('fire!'))
     >>> print(term.move_xy(20, 7) + term.bold('Direct hit!'))
     >>> print(term.move_y(term.height - 3))
 
