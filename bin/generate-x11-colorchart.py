@@ -22,6 +22,7 @@ color_alias_fmt = """
 
 csv_table = """.. csv-table:: All Terminal colors, by name
    :header: "Name", "Image", "R", "G", "B", "H", "S", "V"
+   :name: Color chart
 """
 
 
