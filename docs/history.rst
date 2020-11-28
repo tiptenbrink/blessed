@@ -48,6 +48,8 @@ Version History
     though such value is always True since 1.9.
   * bugfix: Now imports on 3.10+
   * bugfix: Fix detection of shift+arrow keys when using tmux. :ghissue:`178`.
+  * enhancement: Instantiate SequenceTextWrapper only once in
+    :meth:`~.Terminal.wrap`. :ghissue:`184`.
 
 1.16
   * introduced: Windows support?! :ghpull:`110` by :ghuser:`avylove`.
