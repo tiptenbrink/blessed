@@ -49,8 +49,6 @@ And finally, the direct ``(r, g, b)`` values of 0-255 can be used for :meth:`~.T
 and :meth:`~.Terminal.on_color_rgb` for foreground and background colors, to access each and every
 color!
 
-.. _Color chart:
-
 .. include:: all_the_colors.txt
 
 256 Colors
