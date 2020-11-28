@@ -1139,11 +1139,11 @@ class Terminal(object):
         customize wrapping behaviour.
         """
         width = self.width if width is None else width
+        wrapper = SequenceTextWrapper(width=width, term=self, **kwargs)
         lines = []
         for line in text.splitlines():
             lines.extend(
-                (_linewrap for _linewrap in SequenceTextWrapper(
-                    width=width, term=self, **kwargs).wrap(line))
+                (_linewrap for _linewrap in wrapper.wrap(line))
                 if line.strip() else (u'',))
 
         return lines
