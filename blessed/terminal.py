@@ -240,7 +240,7 @@ class Terminal(object):
         if self._stream in (sys.__stdout__, sys.__stderr__):
             try:
                 self._keyboard_fd = sys.__stdin__.fileno()
-            except ValueError as err:
+            except (AttributeError, ValueError) as err:
                 self.errors.append('Unable to determine input stream file descriptor: %s' % err)
             else:
                 # _keyboard_fd only non-None if both stdin and stdout is a tty.
