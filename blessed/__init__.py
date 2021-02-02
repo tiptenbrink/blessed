@@ -10,7 +10,7 @@ import platform as _platform
 if _platform.system() == 'Windows':
     from blessed.win_terminal import Terminal
 else:
-    from blessed.terminal import Terminal
+    from blessed.terminal import Terminal  # type: ignore
 
 if (3, 0, 0) <= _sys.version_info[:3] < (3, 2, 3):
     # Good till 3.2.10
