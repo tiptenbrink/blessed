@@ -4,5 +4,6 @@ global-exclude *.py[cod] __pycache__
 include LICENSE
 include version.json
 include *.txt
+include mypy.ini
 include tox.ini
 recursive-include tests *.py *.ans
