@@ -6,4 +6,5 @@ include version.json
 include *.txt
 include mypy.ini
 include tox.ini
+recursive-include blessed *.pyi py.typed
 recursive-include tests *.py *.ans
