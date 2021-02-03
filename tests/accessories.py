@@ -12,6 +12,11 @@ import functools
 import traceback
 import contextlib
 import subprocess
+try:
+    from typing import Callable
+except ImportError:  # py2
+    pass
+
 
 # 3rd party
 import six
@@ -31,7 +36,7 @@ else:
 test_kind = 'xterm-256color'
 if platform.system() == 'Windows':
     test_kind = 'vtwin10'
-TestTerminal = functools.partial(Terminal, kind=test_kind)
+TestTerminal = functools.partial(Terminal, kind=test_kind)  # type: Callable[..., Terminal]
 SEND_SEMAPHORE = SEMAPHORE = b'SEMAPHORE\n'
 RECV_SEMAPHORE = b'SEMAPHORE\r\n'
 many_lines_params = [40, 80]
