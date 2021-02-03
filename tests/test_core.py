@@ -191,8 +191,7 @@ def test_setupterm_singleton_issue_33():
         try:
             # a second instantiation raises UserWarning
             term = TestTerminal(kind=next_kind, force_styling=True)
-        except UserWarning:
-            err = sys.exc_info()[1]
+        except UserWarning as err:
             assert (err.args[0].startswith(
                     'A terminal of kind "' + next_kind + '" has been requested')
                     ), err.args[0]
@@ -219,8 +218,7 @@ def test_setupterm_invalid_issue39():
 
         try:
             term = TestTerminal(kind='unknown', force_styling=True)
-        except UserWarning:
-            err = sys.exc_info()[1]
+        except UserWarning as err:
             assert err.args[0] in (
                 "Failed to setupterm(kind='unknown'): "
                 "setupterm: could not find terminal",
@@ -430,8 +428,7 @@ def test_win32_missing_tty_modules(monkeypatch):
             try:
                 import blessed.terminal
                 reload_module(blessed.terminal)
-            except UserWarning:
-                err = sys.exc_info()[1]
+            except UserWarning as err:
                 assert err.args[0] == blessed.terminal._MSG_NOSUPPORT
 
             warnings.filterwarnings("ignore", category=UserWarning)

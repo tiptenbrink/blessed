@@ -471,21 +471,18 @@ def test_nice_formatting_errors(all_terms):
         try:
             t.bold_misspelled('hey')
             assert not t.is_a_tty or False, 'Should have thrown exception'
-        except TypeError:
-            e = sys.exc_info()[1]
+        except TypeError as e:
             assert 'Unknown terminal capability,' in e.args[0]
         try:
             t.bold_misspelled(u'hey')  # unicode
             assert not t.is_a_tty or False, 'Should have thrown exception'
-        except TypeError:
-            e = sys.exc_info()[1]
+        except TypeError as e:
             assert 'Unknown terminal capability,' in e.args[0]
 
         try:
             t.bold_misspelled(None)  # an arbitrary non-string
             assert not t.is_a_tty or False, 'Should have thrown exception'
-        except TypeError:
-            e = sys.exc_info()[1]
+        except TypeError as e:
             assert 'Unknown terminal capability,' not in e.args[0]
 
         if platform.python_implementation() != 'PyPy':
@@ -493,8 +490,7 @@ def test_nice_formatting_errors(all_terms):
             try:
                 t.bold_misspelled('a', 'b')  # >1 string arg
                 assert not t.is_a_tty or False, 'Should have thrown exception'
-            except TypeError:
-                e = sys.exc_info()[1]
+            except TypeError as e:
                 assert 'Unknown terminal capability,' in e.args[0], e.args
 
     child(all_terms)
