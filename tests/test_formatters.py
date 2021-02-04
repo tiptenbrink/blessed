@@ -479,7 +479,7 @@ def test_tparm_returns_null(monkeypatch):
 
     pstr = ParameterizingString(u'cap', u'norm', u'seq-name')
 
-    value = pstr(u'x')
+    value = pstr(0)
     assert isinstance(value, NullCallableString)
 
 
