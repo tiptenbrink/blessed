@@ -1,5 +1,12 @@
 Version History
 ===============
+1.18
+  * introduced: type annotations, :ghissue:`192` by :ghuser:`dlax`.
+  * bugfix: do not fail when ``sys.stdin`` is unset, :ghissue:`195` by
+    :ghuser:`Olen`
+  * docfix: correct "Bottom of the screen" example to use ``end=''`` and
+    document about it in location.rst, :ghissue:`188` by :ghuser:`pyfisch`
+
 1.17
   * introduced: :ref:`hyperlinks`, method :meth:`~Terminal.link`, :ghissue:`116`.
   * introduced: 24-bit color support, detected by ``term.number_of_colors == 1 << 24``, and 24-bit
