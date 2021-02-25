@@ -4,10 +4,14 @@ Location
 If you just want to move the location of the cursor before writing text, and aren't worried about
 returning, do something like this:
 
-    >>> print(term.home + term.clear)
-    >>> print(term.move_down(2) + term.move_right(20) + term.bright_red('fire!'))
-    >>> print(term.move_xy(20, 7) + term.bold('Direct hit!'))
-    >>> print(term.move_y(term.height - 3))
+    >>> print(term.home + term.clear, end='')
+    >>> print(term.move_down(2) + term.move_right(20) + term.bright_red('fire!'), end='')
+    >>> print(term.move_xy(20, 7) + term.bold('Direct hit!'), end='')
+    >>> print(term.move_y(term.height - 3), end='')
+
+Note our use of ``end=''`` to the built-in :func:`print` function, this is
+because the default ``end='\n'`` value causes the cursor to move to the first
+column of the next row.
 
 There are four direct movement capabilities:
 
