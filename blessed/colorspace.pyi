@@ -1,4 +1,5 @@
-from typing import Dict, NamedTuple, Set, Tuple
+# std imports
+from typing import Set, Dict, Tuple, NamedTuple
 
 CGA_COLORS: Set[str]
 

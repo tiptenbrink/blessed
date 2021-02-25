@@ -12,11 +12,6 @@ import functools
 import traceback
 import contextlib
 import subprocess
-try:
-    from typing import Callable
-except ImportError:  # py2
-    pass
-
 
 # 3rd party
 import six
@@ -24,6 +19,12 @@ import pytest
 
 # local
 from blessed import Terminal
+
+try:
+    from typing import Callable
+except ImportError:  # py2
+    pass
+
 
 if platform.system() != "Windows":
     import curses

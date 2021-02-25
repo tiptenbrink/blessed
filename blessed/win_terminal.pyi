@@ -1,4 +1,7 @@
-from typing import ContextManager, Optional
+# std imports
+from typing import Optional, ContextManager
+
+# local
 from .terminal import Terminal as _Terminal
 
 class Terminal(_Terminal):

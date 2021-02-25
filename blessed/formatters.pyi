@@ -1,17 +1,17 @@
-from typing import (
-    Any,
-    Callable,
-    List,
-    NoReturn,
-    Optional,
-    Set,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-    overload,
-)
+# std imports
+from typing import (Any,
+                    Set,
+                    List,
+                    Type,
+                    Tuple,
+                    Union,
+                    TypeVar,
+                    Callable,
+                    NoReturn,
+                    Optional,
+                    overload)
 
+# local
 from .terminal import Terminal
 
 COLORS = Set[str]

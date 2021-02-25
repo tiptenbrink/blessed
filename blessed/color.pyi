@@ -1,4 +1,5 @@
-from typing import Callable, Dict, Tuple
+# std imports
+from typing import Dict, Tuple, Callable
 
 _RGB = Tuple[int, int, int]
 

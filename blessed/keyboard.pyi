@@ -1,5 +1,7 @@
-from typing import Dict, Iterable, Mapping, OrderedDict, Optional, Set, Type, TypeVar
+# std imports
+from typing import Set, Dict, Type, Mapping, TypeVar, Iterable, Optional, OrderedDict
 
+# local
 from .terminal import Terminal
 
 _T = TypeVar("_T")

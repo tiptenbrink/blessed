@@ -1,13 +1,13 @@
-from typing import Any, ContextManager, IO, List, Optional, OrderedDict, Tuple, Union
+# std imports
+from typing import IO, Any, List, Tuple, Union, Optional, OrderedDict, ContextManager
 
-from .formatters import (
-    FormattingOtherString,
-    FormattingString,
-    NullCallableString,
-    ParameterizingString,
-)
+# local
 from .keyboard import Keystroke
 from .sequences import Termcap
+from .formatters import (FormattingString,
+                         NullCallableString,
+                         ParameterizingString,
+                         FormattingOtherString)
 
 HAS_TTY: bool
 

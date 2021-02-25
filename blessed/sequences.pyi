@@ -1,6 +1,8 @@
+# std imports
 import textwrap
-from typing import Any, Iterator, Optional, Pattern, Tuple, Type, TypeVar
+from typing import Any, Type, Tuple, Pattern, TypeVar, Iterator, Optional
 
+# local
 from .terminal import Terminal
 
 _T = TypeVar("_T")
