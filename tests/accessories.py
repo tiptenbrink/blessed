@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Accessories for automated py.test runner."""
-# standard imports
 from __future__ import print_function, with_statement
 
 # std imports
@@ -11,11 +10,9 @@ import platform
 import functools
 import traceback
 import contextlib
-import subprocess
 
 # 3rd party
 import six
-import pytest
 
 # local
 from blessed import Terminal
@@ -40,31 +37,6 @@ if platform.system() == 'Windows':
 TestTerminal = functools.partial(Terminal, kind=test_kind)  # type: Callable[..., Terminal]
 SEND_SEMAPHORE = SEMAPHORE = b'SEMAPHORE\n'
 RECV_SEMAPHORE = b'SEMAPHORE\r\n'
-many_lines_params = [40, 80]
-# we must test a '1' column for conditional in _handle_long_word
-many_columns_params = [1, 10]
-
-if os.environ.get('TEST_QUICK'):
-    many_lines_params = [80, ]
-    many_columns_params = [25, ]
-
-all_terms_params = 'xterm screen ansi vt220 rxvt cons25 linux'.split()
-
-if os.environ.get('TEST_FULL'):
-    try:
-        all_terms_params = [
-            # use all values of the first column of data in output of 'toe -a'
-            _term.split(None, 1)[0] for _term in
-            subprocess.Popen(('toe', '-a'),
-                             stdout=subprocess.PIPE,
-                             close_fds=True)
-            .communicate()[0].splitlines()]
-    except OSError:
-        pass
-elif platform.system() == 'Windows':
-    all_terms_params = ['vtwin10', ]
-elif os.environ.get('TEST_QUICK'):
-    all_terms_params = 'xterm screen ansi linux'.split()
 
 
 def init_subproc_coverage(run_note):
@@ -164,8 +136,7 @@ class as_subprocess(object):
         assert os.WEXITSTATUS(status) == 0
 
 
-def read_until_semaphore(fd, semaphore=RECV_SEMAPHORE,
-                         encoding='utf8', timeout=10):
+def read_until_semaphore(fd, semaphore=RECV_SEMAPHORE, encoding='utf8'):
     """
     Read file descriptor ``fd`` until ``semaphore`` is found.
 
@@ -254,21 +225,3 @@ def unicode_parm(cap, *parms):
         if val:
             return val.decode('latin1')
     return u''
-
-
-@pytest.fixture(params=all_terms_params)
-def all_terms(request):
-    """Common kind values for all kinds of terminals."""
-    return request.param
-
-
-@pytest.fixture(params=many_lines_params)
-def many_lines(request):
-    """Various number of lines for screen height."""
-    return request.param
-
-
-@pytest.fixture(params=many_columns_params)
-def many_columns(request):
-    """Various number of columns for screen width."""
-    return request.param
