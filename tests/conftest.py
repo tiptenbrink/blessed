@@ -1,3 +1,5 @@
+"""Configure test fixtures"""
+
 # std imports
 import os
 import platform
@@ -11,12 +13,41 @@ many_lines_params = [40, 80]
 # we must test a '1' column for conditional in _handle_long_word
 many_columns_params = [1, 10]
 
-if os.environ.get('TEST_FULL'):
+
+def envvar_enabled(envvar):
+    """
+    Return True if environment variable is set and enabled
+
+    unset values, 'no', 0, and 'false' and treated as False regardless of case
+    All other values are considered True
+    """
+
+    value = os.environ.get(envvar, False)
+
+    if value is False:
+        return value
+
+    if value.lower() in ('no', 'false'):
+        return False
+
+    try:
+        return bool(int(value))
+    except ValueError:
+        return True
+
+
+TEST_FULL = envvar_enabled('TEST_FULL')
+TEST_KEYBOARD = envvar_enabled('TEST_KEYBOARD')
+TEST_QUICK = envvar_enabled('TEST_QUICK')
+TEST_RAW = envvar_enabled('TEST_RAW')
+
+
+if TEST_FULL:
     try:
         all_terms_params = [
             # use all values of the first column of data in output of 'toe -a'
             _term.split(None, 1)[0] for _term in
-            subprocess.Popen(('toe', '-a'),
+            subprocess.Popen(('toe', '-a'),  # pylint: disable=consider-using-with
                              stdout=subprocess.PIPE,
                              close_fds=True)
             .communicate()[0].splitlines()]
@@ -24,11 +55,11 @@ if os.environ.get('TEST_FULL'):
         pass
 elif platform.system() == 'Windows':
     all_terms_params = ['vtwin10', ]
-elif os.environ.get('TEST_QUICK'):
+elif TEST_QUICK:
     all_terms_params = 'xterm screen ansi linux'.split()
 
 
-if os.environ.get('TEST_QUICK'):
+if TEST_QUICK:
     many_lines_params = [80, ]
     many_columns_params = [25, ]
 

@@ -1,5 +1,6 @@
+"""Tests for Terminal.wrap()"""
+
 # std imports
-import os
 import textwrap
 
 # 3rd party
@@ -7,6 +8,7 @@ import pytest
 
 # local
 from .accessories import TestTerminal, as_subprocess
+from.conftest import TEST_QUICK
 
 TEXTWRAP_KEYWORD_COMBINATIONS = [
     dict(break_long_words=False,
@@ -34,7 +36,7 @@ TEXTWRAP_KEYWORD_COMBINATIONS = [
          drop_whitespace=True,
          subsequent_indent=' '),
 ]
-if os.environ.get('TEST_QUICK', None) is not None:
+if TEST_QUICK:
     # test only one feature: everything on
     TEXTWRAP_KEYWORD_COMBINATIONS = [
         dict(break_long_words=True,
@@ -80,10 +82,10 @@ def test_SequenceWrapper(many_columns, kwargs):
         term.red_on_white('x')
         term.on_bright_white('x')
 
-        pgraph_colored = u''.join([
+        pgraph_colored = u''.join(
             getattr(term, (attributes[idx % len(attributes)]))(char)
             if char != u' ' else u' '
-            for idx, char in enumerate(pgraph)])
+            for idx, char in enumerate(pgraph))
 
         internal_wrapped = textwrap.wrap(pgraph, width=width, **kwargs)
         my_wrapped = term.wrap(pgraph, width=width, **kwargs)
@@ -94,8 +96,7 @@ def test_SequenceWrapper(many_columns, kwargs):
 
         # ensure content matches for each line, when the sequences are
         # stripped back off of each line
-        for line_no, (left, right) in enumerate(
-                zip(internal_wrapped, my_wrapped_colored)):
+        for left, right in zip(internal_wrapped, my_wrapped_colored):
             assert left == term.strip_seqs(right)
 
         # ensure our colored textwrap is the same paragraph length

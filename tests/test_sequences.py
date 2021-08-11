@@ -9,7 +9,12 @@ import six
 import pytest
 
 # local
-from .accessories import TestTerminal, unicode_cap, unicode_parm, as_subprocess
+from .accessories import TestTerminal, unicode_cap, unicode_parm, as_subprocess, MockTigetstr
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason="requires real tty")
@@ -199,8 +204,9 @@ def test_inject_move_x():
     def child(kind):
         t = TestTerminal(kind=kind, stream=six.StringIO(), force_styling=True)
         COL = 5
-        with t.location(x=COL):
-            pass
+        with mock.patch('curses.tigetstr', side_effect=MockTigetstr(hpa=None)):
+            with t.location(x=COL):
+                pass
         expected_output = u''.join(
             (unicode_cap('sc') or u'\x1b[s',
              u'\x1b[{0}G'.format(COL + 1),
@@ -220,8 +226,9 @@ def test_inject_move_y():
     def child(kind):
         t = TestTerminal(kind=kind, stream=six.StringIO(), force_styling=True)
         ROW = 5
-        with t.location(y=ROW):
-            pass
+        with mock.patch('curses.tigetstr', side_effect=MockTigetstr(vpa=None)):
+            with t.location(y=ROW):
+                pass
         expected_output = u''.join(
             (unicode_cap('sc') or u'\x1b[s',
              u'\x1b[{0}d'.format(ROW + 1),
@@ -236,7 +243,7 @@ def test_inject_move_y():
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason="requires multiprocess")
 def test_inject_civis_and_cnorm_for_ansi():
-    """Test injection of cvis attribute for ansi."""
+    """Test injection of civis attribute for ansi."""
     @as_subprocess
     def child(kind):
         t = TestTerminal(kind=kind, stream=six.StringIO(), force_styling=True)
@@ -280,6 +287,8 @@ def test_zero_location(all_terms):
 
 def test_mnemonic_colors(all_terms):
     """Make sure color shortcuts work."""
+    # pylint:  disable=consider-using-ternary
+
     @as_subprocess
     def child(kind):
         def color(t, num):
@@ -363,16 +372,10 @@ def test_formatting_functions(all_terms):
     def child(kind):
         t = TestTerminal(kind=kind)
         # test simple sugar,
-        if t.bold:
-            expected_output = u''.join((t.bold, u'hi', t.normal))
-        else:
-            expected_output = u'hi'
+        expected_output = u''.join((t.bold, u'hi', t.normal)) if t.bold else u'hi'
         assert t.bold(u'hi') == expected_output
         # Plain strs for Python 2.x
-        if t.green:
-            expected_output = u''.join((t.green, 'hi', t.normal))
-        else:
-            expected_output = u'hi'
+        expected_output = u''.join((t.green, 'hi', t.normal)) if t.green else u'hi'
         assert t.green('hi') == expected_output
         # Test unicode
         if t.underline:
@@ -470,18 +473,18 @@ def test_nice_formatting_errors(all_terms):
         t = TestTerminal(kind=kind)
         try:
             t.bold_misspelled('hey')
-            assert not t.is_a_tty or False, 'Should have thrown exception'
+            assert not t.is_a_tty, 'Should have thrown exception'
         except TypeError as e:
             assert 'Unknown terminal capability,' in e.args[0]
         try:
             t.bold_misspelled(u'hey')  # unicode
-            assert not t.is_a_tty or False, 'Should have thrown exception'
+            assert not t.is_a_tty, 'Should have thrown exception'
         except TypeError as e:
             assert 'Unknown terminal capability,' in e.args[0]
 
         try:
             t.bold_misspelled(None)  # an arbitrary non-string
-            assert not t.is_a_tty or False, 'Should have thrown exception'
+            assert not t.is_a_tty, 'Should have thrown exception'
         except TypeError as e:
             assert 'Unknown terminal capability,' not in e.args[0]
 
@@ -489,7 +492,7 @@ def test_nice_formatting_errors(all_terms):
             # PyPy fails to toss an exception, Why?!
             try:
                 t.bold_misspelled('a', 'b')  # >1 string arg
-                assert not t.is_a_tty or False, 'Should have thrown exception'
+                assert not t.is_a_tty, 'Should have thrown exception'
             except TypeError as e:
                 assert 'Unknown terminal capability,' in e.args[0], e.args
 
@@ -628,6 +631,7 @@ def test_formatting_other_string(all_terms):
 def test_termcap_match_optional():
     """When match_optional is given, numeric matches are optional"""
     from blessed.sequences import Termcap
+
     @as_subprocess
     def child():
         t = TestTerminal(force_styling=True)

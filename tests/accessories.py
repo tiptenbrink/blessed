@@ -40,6 +40,7 @@ RECV_SEMAPHORE = b'SEMAPHORE\r\n'
 
 
 def init_subproc_coverage(run_note):
+    """Run coverage on subprocess"""
     try:
         import coverage
     except ImportError:
@@ -52,7 +53,7 @@ def init_subproc_coverage(run_note):
     return cov
 
 
-class as_subprocess(object):
+class as_subprocess(object):  # pylint: disable=too-few-public-methods
     """This helper executes test cases in a child process, avoiding a python-internal bug of
     _curses: setupterm() may not be called more than once per process."""
     _CHILD_PID = 0
@@ -61,7 +62,7 @@ class as_subprocess(object):
     def __init__(self, func):
         self.func = func
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs):  # pylint: disable=too-many-locals
         if platform.system() == 'Windows':
             self.func(*args, **kwargs)
             return
@@ -79,11 +80,9 @@ class as_subprocess(object):
                         args=args, kwargs=kwargs))
             try:
                 self.func(*args, **kwargs)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 e_type, e_value, e_tb = sys.exc_info()
-                o_err = list()
-                for line in traceback.format_tb(e_tb):
-                    o_err.append(line.rstrip().encode('utf-8'))
+                o_err = [line.rstrip().encode('utf-8') for line in traceback.format_tb(e_tb)]
                 o_err.append(('-=' * 20).encode('ascii'))
                 o_err.extend([_exc.rstrip().encode('utf-8') for _exc in
                               traceback.format_exception_only(
@@ -225,3 +224,18 @@ def unicode_parm(cap, *parms):
         if val:
             return val.decode('latin1')
     return u''
+
+
+class MockTigetstr(object):  # pylint: disable=too-few-public-methods
+    """
+    Wraps curses.tigetstr() to override specific capnames
+
+    Capnames and return values are provided as keyword arguments
+    """
+
+    def __init__(self, **kwargs):
+        self.callable = curses.tigetstr
+        self.kwargs = kwargs
+
+    def __call__(self, capname):
+        return self.kwargs.get(capname, self.callable(capname))

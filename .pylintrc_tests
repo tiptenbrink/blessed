@@ -18,7 +18,15 @@ disable=
     raise-missing-from,  # Python 2
     super-with-arguments,  # Python 2
     ungrouped-imports,
-    useless-object-inheritance  # Python 2
+    useless-object-inheritance,  # Python 2
+
+    # Testing specific
+    invalid-name,
+    import-error,
+    import-outside-toplevel,
+    protected-access,
+    superfluous-parens,  # Mostly after assert statements
+    unused-argument  # Mostly from test fixtures
 
 [FORMAT]
 max-line-length: 100
@@ -33,18 +41,18 @@ accept-no-return-doc=yes
 [DESIGN]
 max-args=10
 max-attributes=7
-max-branches=12
-max-complexity=11
+max-branches=14
+max-complexity=12
 max-locals=15
 max-module-lines=1300
 max-parents=7
 max-public-methods=20
 max-returns=6
-max-statements=50
+max-statements=60
 
 [SIMILARITIES]
 ignore-imports=yes
-min-similarity-lines=8
+min-similarity-lines=10
 
 [REPORTS]
 reports=no

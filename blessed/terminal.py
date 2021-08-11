@@ -37,6 +37,8 @@ from .formatters import (COLORS,
                          resolve_capability)
 from ._capabilities import CAPABILITY_DATABASE, CAPABILITIES_ADDITIVES, CAPABILITIES_RAW_MIXIN
 
+# isort: off
+
 try:
     InterruptedError
 except NameError:
@@ -55,8 +57,8 @@ else:
     import curses
 
     try:
-        import termios
         import fcntl
+        import termios
         import tty
     except ImportError:
         _TTY_METHODS = ('setraw', 'cbreak', 'kbhit', 'height', 'width')
@@ -570,8 +572,9 @@ class Terminal(object):
             always ensure the return value is checked for ``(-1, -1)``.
 
         The location of the cursor is determined by emitting the ``u7`` terminal capability, or
-        VT100 `Query Cursor Position <http://www.termsys.demon.co.uk/vtansi.htm#status>`_ when such
-        capability is undefined, which elicits a response from a reply string described by
+        VT100 `Query Cursor Position
+        <https://www2.ccs.neu.edu/research/gpc/VonaUtils/vona/terminal/vtansi.htm#status>`_
+        when such capability is undefined, which elicits a response from a reply string described by
         capability ``u6``, or again VT100's definition of ``\x1b[%i%d;%dR`` when undefined.
 
         The ``(y, x)`` return value matches the parameter order of the :meth:`move_xy` capability.
@@ -1214,7 +1217,7 @@ class Terminal(object):
         ready_r = [None, ]
         check_r = [self._keyboard_fd] if self._keyboard_fd is not None else []
 
-        while HAS_TTY and True:
+        while HAS_TTY:
             try:
                 ready_r, _, _ = select.select(check_r, [], [], timeout)
             except InterruptedError:
