@@ -100,7 +100,7 @@ jobs:
       - name: Upload to Codecov
         if: ${{ matrix.label != 'linting' }}
 
-        # Python Uploader
+        # CodeCov Python Uploader
         env:
           CODECOV_ENV: TEST_QUICK,TEST_KEYBOARD,TEST_RAW
           CODECOV_NAME: ${{ matrix.label || matrix.python-version }} ${{ startsWith(matrix.os, 'windows') && '(Windows)' || '' }}
@@ -108,7 +108,7 @@ jobs:
           TOXPYTHON: ${{ matrix.toxpython || matrix.python-version }}
         run: tox -e codecov
 
-        # GitHub Actions Uploader - Currently not used due to https://github.com/codecov/uploader/issues/259
+        # CodeCov GitHub Actions Uploader
         # uses: codecov/codecov-action@v2
         # with:
         #   verbose: true
