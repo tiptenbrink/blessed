@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 """Tests for Terminal() sequences and sequence-awareness."""
+# -*- coding: utf-8 -*-
 # std imports
 import sys
 import platform
@@ -651,3 +651,68 @@ def test_termcap_match_optional():
         assert cap.re_compiled.match(t.cub1) is None
 
     child()
+
+
+def test_truncate(all_terms):
+    """Test terminal.truncate and make sure it agrees with terminal.length"""
+    @as_subprocess
+    def child(kind):
+        from blessed import Terminal
+        term = Terminal(kind)
+
+        test_string = term.red("Testing ") + term.yellow("makes ") +\
+            term.green("me ") + term.blue("feel ") +\
+            term.indigo("good") + term.normal
+        stripped_string = term.strip_seqs(test_string)
+        for i in range(len(stripped_string)):
+            test_l = term.length(term.truncate(test_string, i))
+            assert test_l == len(stripped_string[:i])
+        test_nogood = term.red("Testing ") + term.yellow("makes ") +\
+            term.green("me ") + term.blue("feel ") +\
+            term.indigo("") + term.normal
+        trunc = term.truncate(test_string, term.length(test_string) - len("good"))
+        assert trunc == test_nogood
+
+    child(all_terms)
+
+
+def test_truncate_wide_end(all_terms):
+    """Ensure that terminal.truncate has the correct behaviour for wide characters."""
+    @as_subprocess
+    def child(kind):
+        from blessed import Terminal
+        term = Terminal(kind)
+        test_string = u"AB\uff23"  # ABＣ
+        assert term.truncate(test_string, 3) == u"AB"
+
+    child(all_terms)
+
+
+def test_truncate_wcwidth_clipping(all_terms):
+    """Ensure that terminal.truncate has the correct behaviour for wide characters."""
+    @as_subprocess
+    def child(kind):
+        from blessed import Terminal
+        term = Terminal(kind)
+        assert term.truncate("", 4) == ""
+        test_string = term.blue(u"one\x01two")
+        assert term.truncate(test_string, 4) == term.blue(u"one\x01t")
+
+    child(all_terms)
+
+
+def test_truncate_padding(all_terms):
+    """Ensure that terminal.truncate has the correct behaviour for wide characters."""
+    @as_subprocess
+    def child(kind):
+        from blessed import Terminal
+        term = Terminal(kind)
+        test_right_string = term.blue(u"one" + term.move_right(5) + u"two")
+        assert term.truncate(test_right_string, 9) == term.blue(u"one     t")
+
+        test_bs_string = term.blue(u"one\b\b\btwo")
+        assert term.truncate(test_bs_string, 3) == term.blue(u"two")
+
+    if all_terms != 'vtwin10':
+        # padding doesn't work the same on windows !
+        child(all_terms)
