@@ -7,7 +7,10 @@ import textwrap
 
 # 3rd party
 import six
-from wcwidth import wcwidth
+try:
+    from cwcwidth import wcwidth
+except ImportError:
+    from wcwidth import wcwidth
 
 # local
 from blessed._capabilities import CAPABILITIES_CAUSE_MOVEMENT

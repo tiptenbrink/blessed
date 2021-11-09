@@ -301,6 +301,23 @@ def test_sequence_length(all_terms):
     child(all_terms)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 6), reason="requires cwcwidth which requires python3.6 or higher")
+def test_length_zerowidth():
+    """Test length of East Asian characters"""
+    @as_subprocess
+    def child():
+        term = TestTerminal()
+
+        # given,
+        given = term.bold_red(u'0123⁦⁩⁦⁩')
+        expected = sum((1, 1, 1, 1, 0, 0, 0, 0,))
+
+        # exercise,
+        assert term.length(given) == expected
+
+    child()
+
+
 def test_env_winsize():
     """Test height and width is appropriately queried in a pty."""
     @as_subprocess

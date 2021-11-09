@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 """Tests for Terminal.wrap()"""
 
 # std imports
+import sys
 import textwrap
 
 # 3rd party
@@ -124,6 +126,33 @@ def test_multiline():
             'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
             'BB',
             'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+            'CC',
+            '',
+        ]
+        result = term.wrap(given_string, width=30)
+        assert expected == result
+
+    child()
+
+
+@pytest.mark.skipif(sys.version_info < (3, 6), reason="requires cwcwidth which requires python3.6 or higher")
+def test_multiline_zero_width():
+    """Test that text wrapping matches also with zero width characters."""
+
+    @as_subprocess
+    def child():
+        # build a test paragraph, along with a very colorful version
+        term = TestTerminal()
+        given_string = ('\n' + (29 * 'A' + 3 * u'⁩' + 3 * 'A') + '\n' +
+                        (29 * 'B' + 3 * u'⁩' + 3 * 'B') + '\n' +
+                        (29 * 'C' + 3 * u'⁩' + 3 * 'C') + '\n\n')
+        expected = [
+            '',
+            u'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA⁩⁩⁩A',
+            'AA',
+            u'BBBBBBBBBBBBBBBBBBBBBBBBBBBBB⁩⁩⁩B',
+            'BB',
+            u'CCCCCCCCCCCCCCCCCCCCCCCCCCCCC⁩⁩⁩C',
             'CC',
             '',
         ]
